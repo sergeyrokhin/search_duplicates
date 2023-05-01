@@ -6,6 +6,8 @@
 #include <vector>
 #include <map>
 #include <set>
+#include <future>
+
 
 struct FilePoint
 {
@@ -19,6 +21,16 @@ struct DirPoint
     std::size_t parent_index;
     std::string file_name;
 };
+
+struct Access {
+    lock_guard<mutex> guard;
+    std::vector<std::size_t>& ref_to_value;
+};
+
+//Access operator[](const Key& key) {
+//    uint64_t set_number = (uint64_t)(key) % bucket_count_;
+//    return { lock_guard(m_[set_number]), dictiorary_[set_number][key] };
+//}
 
 class FileCatalogue {
 public:

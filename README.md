@@ -15,10 +15,14 @@ Usage: search_duplicates <filename_with_catalogue_list>
 
 <filename_with_catalogue_list> contains:
 <.extention>
+
 <dir1>
+  
 <dir2>
 
 Пример файла:
 .cpp
+  
 D:/Data/C++/Git для Практикума С++
+  
 D:/Data/C++/Code

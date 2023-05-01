@@ -17,10 +17,10 @@ filename_with_catalogue_list contains:\
 \
 .extention\
 dir1\
-dir2\
+dir2
 
 Пример файла:\
 \
 .cpp\
 D:/Data/C++/Git для Практикума С++\
-D:/Data/C++/Code\
+D:/Data/C++/Code

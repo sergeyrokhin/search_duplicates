@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 3.1)
 project(search_duplicates)
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
+#set(SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(SRC_FILES_CPP_FILES main.cpp search_duplicate.cpp crc32.cpp)
 set(SRC_FILES_H_FILES search_duplicate.h)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-message(" SOURCE_DIR \"" ${CMAKE_CURRENT_SOURCE_DIR} "\"")
+#message(" SOURCE_DIR \"" ${SOURCE_DIR} "\"")
 add_executable(${PROJECT_NAME} ${SRC_FILES_CPP_FILES} ${SRC_FILES_H_FILES})

@@ -42,12 +42,12 @@ void CreateCollection(FileCatalogue &catalogue, size_t parent_index, path collec
         bool is_dir = (dir_entry.status().type() == filesystem::file_type::directory);
         if (is_dir)
         {
-            catalogue.dir_list_.push_back({section_index, parent_index, dir_entry.path().filename().string()});
-            CreateCollection(catalogue, catalogue.dir_list_.size() - 1, dir_entry.path(), ext);
+            catalogue.dir_list_.push_back({ section_index, parent_index, std::make_unique<std::string>(dir_entry.path().filename().string()) });
+            CreateCollection(catalogue, catalogue.dir_list_.size() - 1,  dir_entry.path(), ext);
         }
         else if (dir_entry.path().extension() == ext)
         {
-            catalogue.file_list_.push_back({ dir_index, dir_entry.path().filename().string()});
+            catalogue.file_list_.push_back({ dir_index, std::make_unique<std::string>(dir_entry.path().filename().string()) });
         }
     }
 }
@@ -64,7 +64,7 @@ FileCatalogue CreateCatalogue(ifstream& in)
         path collection_path(collection_name);
         if (exists(collection_path)) {
             cout << "Dir: " << collection_path << endl;
-            catalogue.section_.push_back(collection_path.string());
+            catalogue.section_.push_back(std::make_unique<std::string>(collection_path.string()));
             CreateCollection(catalogue, 0, collection_path, ext);
         }
         else {
@@ -78,7 +78,7 @@ FileCatalogue CreateCatalogue(ifstream& in)
 
 string FileCatalogue::FullFileName(size_t index)
 {
-    return FullPathName(file_list_[index].parent_index) + "/"s + file_list_[index].file_name ;
+    return FullPathName(file_list_[index].parent_index) + "/"s + *(file_list_[index].file_name.get());
 }
 
 void FileCatalogue::CalculateCRC()
@@ -103,18 +103,18 @@ void FileCatalogue::CalculateCRC()
 
 FileCatalogue::FileCatalogue()
 {
-    dir_list_.push_back({0, 0, "root"s});
+    dir_list_.push_back({0, 0, std::make_unique<std::string>("root"s)});
 }
 
 std::string FileCatalogue::FullPathName(size_t index)
 {
     if(dir_list_[index].parent_index == 0)
     {
-        return section_[dir_list_[index].section_index] + "/"s + dir_list_[index].file_name;
+        return *(section_[dir_list_[index].section_index].get()) + "/"s + *(dir_list_[index].file_name.get());
     }
     else
     {
-        return  FullPathName(dir_list_[index].parent_index) + "/"s + dir_list_[index].file_name;
+        return  FullPathName(dir_list_[index].parent_index) + "/"s + *(dir_list_[index].file_name.get());
     }
 }
 

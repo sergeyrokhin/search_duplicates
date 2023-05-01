@@ -4,26 +4,28 @@
 #include <filesystem>
 #include <iostream>
 #include <vector>
-#include <map>
-#include <set>
+#include <unordered_map>
+#include <unordered_set>
 #include <future>
+#include<mutex>
+#include<memory>
 
 
 struct FilePoint
 {
     std::size_t parent_index;
-    std::string file_name;
+    std::unique_ptr<std::string> file_name;
 };
 
 struct DirPoint
 {
     std::size_t section_index;
     std::size_t parent_index;
-    std::string file_name;
+    std::unique_ptr<std::string> file_name;
 };
 
 struct Access {
-    lock_guard<mutex> guard;
+    std::lock_guard<std::mutex> guard;
     std::vector<std::size_t>& ref_to_value;
 };
 
@@ -39,11 +41,11 @@ public:
     void OutputDuplicateCrc();
     std::string FullFileName(std::size_t index);
     void CalculateCRC();
-    std::vector<std::string> section_;
+    std::vector<std::unique_ptr<std::string>> section_;
     std::vector<DirPoint> dir_list_;
     std::vector<FilePoint> file_list_;
-    std::map<uint32_t, std::vector<std::size_t>> crc_;
-    std::set<uint32_t> duplicated_crc_;
+    std::unordered_map<uint32_t, std::vector<std::size_t>> crc_;
+    std::unordered_set<uint32_t> duplicated_crc_;
 };
 
 struct Path
